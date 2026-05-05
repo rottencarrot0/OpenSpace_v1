@@ -20,16 +20,40 @@ repositories {
 }
 
 dependencies {
+    // WEB
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+
+    // JSP 렌더링
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+
+    // JSTL
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
+    
+    // database
     implementation 'org.springframework.boot:spring-boot-h2console'
+    
+    // jdbc
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:4.0.1'
-    compileOnly 'org.projectlombok:lombok'
+
+    // h2
     runtimeOnly 'com.h2database:h2'
+    
+    // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    
+    // Mybatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:4.0.1'
+    
+    // tomcat (WAR 배포)
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat-runtime'
+    
+    // 테스트
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jdbc-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-jdbc-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
