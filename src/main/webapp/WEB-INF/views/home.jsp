@@ -12,7 +12,7 @@
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
 
-
+<div>home</div>
 
 
 

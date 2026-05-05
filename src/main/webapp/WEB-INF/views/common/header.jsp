@@ -16,4 +16,4 @@
 </head>
 <body>
 
-<main>
+<main class="container">
