@@ -1,6 +1,7 @@
 package openspace.page.controller;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import openspace.page.dto.user.UserRegister;
 import openspace.page.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Slf4j
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -27,6 +29,8 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "user/register";
         }
+
+        log.info("register = {}", register);
         userService.register(register);
 
         return "ok";

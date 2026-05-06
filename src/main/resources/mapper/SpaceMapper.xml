@@ -29,7 +29,7 @@
         and is_deleted = 0
     </select>
 
-    <select id="findSpaceListByHostId" parameterType="Long" resultMap="Space">
+    <select id="findSpaceListByHostId" parameterType="Long" resultType="Space">
         select
             id as id
              , host_id as hostId

@@ -13,5 +13,6 @@ public class User {
     private String email;
     private UserRole role;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private int isDeleted;
 }
