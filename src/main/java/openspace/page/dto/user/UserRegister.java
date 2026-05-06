@@ -2,6 +2,7 @@ package openspace.page.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import openspace.page.domain.UserRole;
@@ -20,6 +21,6 @@ public class UserRegister {
     @NotEmpty
     private String email;
 
-    @NotEmpty
+    @NotNull
     private UserRole role;
 }
