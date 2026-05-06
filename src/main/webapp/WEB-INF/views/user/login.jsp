@@ -14,6 +14,12 @@
   <div class="col-md-4">
     <h2 class="mb-4">로그인</h2>
 
+    <c:if test="${not empty errorMessage}">
+      <div class = "alert alert-danger">
+        <c:out value="${errorMessage}" />
+      </div>
+    </c:if>
+
     <form action="/user/login" method="post">
 
       <div class="mb-3">
