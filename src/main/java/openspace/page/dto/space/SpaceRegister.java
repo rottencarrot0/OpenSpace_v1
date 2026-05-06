@@ -1,4 +1,4 @@
-package openspace.page.config.dto.space;
+package openspace.page.dto.space;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
