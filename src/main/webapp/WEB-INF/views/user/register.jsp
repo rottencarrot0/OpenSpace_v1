@@ -31,7 +31,7 @@
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">이메일</label>
-                <input type="text" class="form-control" name="email" id="email" placeholder="이메일을 입력하세요" required />
+                <input type="email" class="form-control" name="email" id="email" placeholder="이메일을 입력하세요" required />
             </div>
             <div class="mb-3">
                 <label for="role" class="form-label">회원 유형</label>
