@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import static openspace.page.domain.SessionConst.LOGIN_USER;
 
@@ -32,16 +33,23 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid final UserLogin user, final BindingResult bindingResult, HttpSession session, Model model) {
+    public String login(@Valid UserLogin user, BindingResult bindingResult,
+                        @RequestParam(name = "redirectURL", defaultValue = "/") String redirectURL,
+                        HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
-            log.info("UserLogin = {}", user);
+            return "user/login";
         }
         log.info("UserLogin = {}", user);
         User loginUser = userService.login(user);
+        if(loginUser == null) {
+            model.addAttribute("errorMessage", "이메일 또는 비밀번호가 맞지 않습니다.");
+            return "user/login";
+        }
+
         session.setAttribute(LOGIN_USER, loginUser);
 
-        return "redirect:/";
+        return "redirect:" + redirectURL;
     }
 
 

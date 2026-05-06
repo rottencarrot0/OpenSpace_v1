@@ -21,4 +21,16 @@
           and is_deleted = 0
     </select>
 
+    <select id="selectIoginUser" parameterType="String" resultType="User">
+        select id       as id,
+               password as password,
+               name     as name,
+               email    as email,
+               role     as role
+        from user
+        where email = #{email}
+          and password = #{password}
+          and is_deleted = 0
+    </select>
+
 </mapper>

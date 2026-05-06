@@ -27,8 +27,8 @@ public class UserService {
         userMapper.insertUser(user);
     }
 
-    public User login(@Valid UserLogin user) {
-        User findUser = userMapper.selectUserByEmail(user.getEmail());
+    public User login(UserLogin loginUser) {
+        User findUser = userMapper.selectIoginUser(loginUser.getEmail(), loginUser.getPassword());
 
         log.info("findUser = {}", findUser);
 
