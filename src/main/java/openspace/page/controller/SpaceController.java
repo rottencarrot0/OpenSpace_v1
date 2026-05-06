@@ -3,7 +3,7 @@ package openspace.page.controller;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import openspace.page.config.dto.space.SpaceRegister;
+import openspace.page.dto.space.SpaceRegister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,6 +37,12 @@ public class SpaceController {
         return "redirect:/space/my_space";
     }
 
+    /**
+     * 내 공간 페이지로 호출
+     * @param session
+     * @param model
+     * @return
+     */
     @GetMapping("/my_space")
     public String mySpace(HttpSession session, Model model) {
 
