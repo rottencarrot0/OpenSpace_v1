@@ -13,34 +13,32 @@
     </insert>
 
     <select id="findSpaceById" parameterType="Long" resultType="Space">
-        select
-            id as id
-        , host_id as hostId
-        , title as title
-        , description as description
-        , address as address
-        , price_per_hour as pricePerHour
-        , capacity as capacity
-        , created_at as createdAt
-        , updated_at as updatedAt
-        , is_deleted as isDeleted
+        select id             as id
+             , host_id        as hostId
+             , title          as title
+             , description    as description
+             , address        as address
+             , price_per_hour as pricePerHour
+             , capacity       as capacity
+             , created_at     as createdAt
+             , updated_at     as updatedAt
+             , is_deleted     as isDeleted
         from space
         where id = #{id}
-        and is_deleted = 0
+          and is_deleted = 0
     </select>
 
     <select id="findSpaceListByHostId" parameterType="Long" resultType="Space">
-        select
-            id as id
-             , host_id as hostId
-             , title as title
-             , description as description
-             , address as address
+        select id             as id
+             , host_id        as hostId
+             , title          as title
+             , description    as description
+             , address        as address
              , price_per_hour as pricePerHour
-             , capacity as capacity
-             , created_at as createdAt
-             , updated_at as updatedAt
-             , is_deleted as isDeleted
+             , capacity       as capacity
+             , created_at     as createdAt
+             , updated_at     as updatedAt
+             , is_deleted     as isDeleted
         from space
         where host_id = #{hostId}
           and is_deleted = 0
