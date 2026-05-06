@@ -13,6 +13,12 @@
     <div class="col-md-8">
         <h2 class="mb-4">회원 가입</h2>
 
+        <c:if test="${not empty errorMessage}">
+            <div class="alert alert-danger">
+                <c:out value="${errorMessage}"/>
+            </div>
+        </c:if>
+
         <form action="/user/register" method="post">
 
             <div class="mb-3">
@@ -21,7 +27,7 @@
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">비밀번호</label>
-                <input type="text" class="form-control" name="password" id="password" placeholder="비밀번호를 입력하세요(3자 이상)" required />
+                <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호를 입력하세요(3자 이상)" required />
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">이메일</label>
