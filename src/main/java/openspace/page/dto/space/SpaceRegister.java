@@ -2,21 +2,23 @@ package openspace.page.dto.space;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
 public class SpaceRegister {
 
-    @NotEmpty(message = "제목은 필수 입력 항목입니다.")
+    @NotBlank(message = "제목은 필수 입력 항목입니다.")
     private String title;
 
-    @NotEmpty(message = "설명은 필수 입력 항목입니다.")
+    @NotBlank(message = "설명은 필수 입력 항목입니다.")
     private String description;
 
-    @NotEmpty(message = "주소는 필수 입력 항목입니다.")
+    @NotBlank(message = "주소는 필수 입력 항목입니다.")
     private String address;
 
+    @Min(value = 0)
     // 가격은 0 원 일 수도 있다..
     private String pricePerHour;
 
