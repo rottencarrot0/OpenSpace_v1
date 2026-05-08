@@ -28,7 +28,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/login")
-    public String login(@RequestParam("redirectURL") String redirectURL, Model model) {
+    public String login(@RequestParam(name = "redirectURL", required = false) String redirectURL, Model model) {
         model.addAttribute("redirectURL", redirectURL);
         return "user/login";
     }
