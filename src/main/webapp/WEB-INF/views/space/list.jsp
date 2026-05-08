@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
 <h2 class="mb-4">공간 검색</h2>
@@ -32,21 +33,51 @@
                        class="text-decoration-none text-dark">
                         <div class="card h-100 shadow-sm">
                             <c:choose>
-                                <c:when test="">
+                                <c:when test="${not empty space.mainImageUrl}">
+                                    <img src="<c:out value="${space.mainImageUrl}"/>" class="card-img-top" alt=""/>
                                 </c:when>
                                 <c:otherwise>
+                                    <img src="https://placehold.co/400x300" class="card-img-top" alt=""/>
                                 </c:otherwise>
                             </c:choose>
+                            <div class="card-body">
+                                <h5 class="card-title"><c:out value="${space.title}"/></h5>
+                                <p class="card-text text-muted small">
+                                    <c:out value="${space.address}"/>
+                                </p>
+                                <p class="card-text text-muted small">
+                                    시간당 <fmt:formatNumber value="${space.pricePerHour}" type="number"/>원
+                                </p>
+                                <p class="card-text text-muted small">
+                                    수용 인원 <c:out value="${space.capacity}"/>명
+                                </p>
+                            </div>
                         </div>
                     </a>
                 </div>
             </c:forEach>
         </div>
-
     </c:when>
     <c:otherwise>
+        <div class="text-center">
+            <p class="text-muted fs-5">검색 결과가 없습니다.</p>
+        </div>
     </c:otherwise>
 </c:choose>
 
+<%--페이징--%>
+<c:if test="${totalPage > 1}">
+    <nav>
+        <ul class="pagination justify-content-center">
+            <c:forEach begin="1" end="${totalPage}" var="i">
+                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                    <a class="page-link" href="${pageContext.request.contextPath}/space?keyword=<c:out value="${keyword}"/>&page${i}">
+                    ${i}
+                    </a>
+                </li>
+            </c:forEach>
+        </ul>
+    </nav>
+</c:if>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
