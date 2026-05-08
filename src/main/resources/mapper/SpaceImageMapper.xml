@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--id, space_id, image_url, is_main, created_at, updated_at, is_deleted-->
+<mapper namespace="openspace.page.mapper.SpaceImageMapper">
+    <insert id="insertSpaceImage" parameterType="SpaceImage" useGeneratedKeys="true" keyProperty="id">
+        insert into space_image (space_id, image_url, is_main)
+        values (#{spaceId}, #{imageUrl}, #{isMain})
+    </insert>
+
+</mapper>

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import openspace.page.domain.Space;
 import openspace.page.domain.SpaceImage;
 import openspace.page.dto.space.SpaceRegister;
+import openspace.page.mapper.SpaceImageMapper;
 import openspace.page.mapper.SpaceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class SpaceService {
 
     @Autowired
     private SpaceMapper spaceMapper;
+
+    @Autowired
+    private SpaceImageMapper spaceImageMapper;
 
     @Autowired
     FileUploadService fileUploadService;
@@ -43,7 +47,7 @@ public class SpaceService {
             img.setSpaceId(space.getId());
             img.setImageUrl(urls.get(i));
             img.setIsMain(i == 0 ? 1 : 0); // 첫 번째 이미지 main 으로 저장
-
+            spaceImageMapper.insertSpaceImage(img);
         }
     }
 }
