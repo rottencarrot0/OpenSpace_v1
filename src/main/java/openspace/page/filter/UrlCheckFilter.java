@@ -29,6 +29,19 @@ public class UrlCheckFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
 
+        // /.well-known/appspecific/com.chrome.devtools.json 제거
+        if(isIgnorePath(requestURI)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 정적 리소스는 검사 제외한다.
+        if(isStaticResource(requestURI)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
         boolean registered = isRegisteredControllerUrl(requestURI);
 
         if(!registered) {
@@ -42,6 +55,7 @@ public class UrlCheckFilter extends OncePerRequestFilter {
         }
     }
 
+
     private boolean isRegisteredControllerUrl(String requestURI) {
         PathContainer path = PathContainer.parsePath(requestURI);
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
@@ -54,5 +68,16 @@ public class UrlCheckFilter extends OncePerRequestFilter {
                 .stream()
                 .flatMap(info -> info.getPatternValues().stream())
                 .anyMatch(pattern -> pathPatternParser.parse(pattern).matches(path));
+    }
+
+    private boolean isStaticResource(String requestURI) {
+        return requestURI.startsWith("/js/")
+                || requestURI.startsWith("/css/")
+                || requestURI.endsWith(".js")
+                || requestURI.endsWith(".css");
+    }
+
+    private boolean isIgnorePath(String requestURI) {
+        return requestURI.startsWith("/.well-known/");
     }
 }
