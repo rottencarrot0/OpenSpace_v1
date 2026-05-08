@@ -7,9 +7,11 @@ $(function() {
         document.getElementById('images').click();
     })
 
+    // 유효성 검사
     $('#images').on('change', function() {
         let files = this.files;
         let errors = [];
+        let reader = new FileReader();
 
         for(let i = 0; i< files.length; i++) {
             let file = files[i];
@@ -28,5 +30,20 @@ $(function() {
             validFiles.length > 0 ? validFiles.length + '개 파일 선택됨' : '선택된 파일 없음'
         )
 
+        onloadFile(validFiles)
+
     })
+
+    function onloadFile(files) {
+        files.forEach(function(file) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                console.log("파일을 읽었습니다");
+            }
+            reader.onerror = function() {
+                console.log("파일 읽기 실패");
+            }
+            reader.readAsDataURL(file);
+        })
+    }
 })

@@ -77,4 +77,5 @@
 
 </div>
 
+<script src="${pageContext.request.contextPath}/js/space/form.js"></script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
