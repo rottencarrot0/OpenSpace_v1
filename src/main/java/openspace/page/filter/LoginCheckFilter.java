@@ -14,7 +14,7 @@ import java.io.IOException;
 @Slf4j
 public class LoginCheckFilter implements Filter {
 
-    private static final String[] no_check_pass = {"/", "/user/login", "/user/logout", "/user/register"};
+    private static final String[] no_check_pass = {"/", "/user/login", "/user/logout", "/user/register", "/space"};
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
