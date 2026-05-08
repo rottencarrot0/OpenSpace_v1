@@ -18,7 +18,7 @@
             </div>
         </c:if>
 
-        <form action="/space" method="post">
+        <form action="/space" method="post" enctype="multipart/form-data">
 
             <div class="mb-3">
                 <label for="title" class="form-label">제목</label>
@@ -46,15 +46,27 @@
                 <div class="form-text">최대 1000명까지 등록 가능합니다.</div>
             </div>
 
-            // 사진 등록 // TODO 임시
             <div class="mb-3">
                 <label for="images" class="form-label">이미지</label>
-                <input type="file" class="form-control" name="images" id="images" placeholder="공간의 이름을 등록하세요" required />
+                <input type="file" class="form-control"
+                       name="images" id="images"
+                       multiple accept="image/*"
+                       style="position:absolute"
+                 />
+
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <button type="button" id="imageSelectBtn" class="btn btn-outline-secondary">파일 선택</button>
+                    <span id="imageFileCount" class="text-muted small">선택된 파일 없음</span>
+                </div>
+
+                 <div class="form-text">
+                    여러 장 선택 가능합니다. 첫 번째 이미지가 대표 이미지로 사용됩니다. (최대 10MB/장, 이미지 파일만)
+                </div>
             </div>
 
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">등록</button>
-                <a type="reset" href="/home" class="btn btn-secondary">취소</a>
+                <a type="reset" href="/space/my_space" class="btn btn-secondary">취소</a>
             </div>
 
         </form>
