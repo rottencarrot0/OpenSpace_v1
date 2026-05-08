@@ -3,7 +3,17 @@ package openspace.page.domain;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
+// id,
+// host_id,
+// title,
+// description,
+// address,
+// price_per_hour,
+// capacity,
+// created_at,
+// updated_at,
+// is_deleted
 @Data
 public class Space {
 
@@ -17,5 +27,5 @@ public class Space {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private int isDeleted;
-
+    private List<SpaceImage> images;
 }

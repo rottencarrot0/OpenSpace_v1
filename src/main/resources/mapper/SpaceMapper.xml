@@ -6,6 +6,28 @@
 
     <!--id, host_id, title, description, address, price_per_hour, capacity, created_at, updated_at, is_deleted -->
 
+    <resultMap id="spaceWithImages" type="Space">
+        <id column="id" property="id"/>
+        <result column="host_id" property="hostId"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="address" property="address"/>
+        <result column="price_per_hour" property="pricePerHour"/>
+        <result column="capacity" property="capacity"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <collection property="images" ofType="SpaceImage">
+            <id column="id" property="id"/>
+            <result column="space_id" property="spaceId"/>
+            <result column="image_url" property="imageUrl"/>
+            <result column="is_main" property="isMain"/>
+            <result column="created_at" property="createAt"/>
+            <result column="updated_at" property="updateAt"/>
+            <result column="is_deleted" property="isDeleted"/>
+        </collection>
+    </resultMap>
+
 
     <insert id="insertSpace" parameterType="Space" useGeneratedKeys="true" keyProperty="id">
         insert into space (host_id, title, description, address, price_per_hour, capacity)
@@ -43,6 +65,47 @@
         where host_id = #{hostId}
           and is_deleted = 0
         order by id desc
+    </select>
+
+    <select id="findSpaceListByKeyword" resultMap="spaceWithImages">
+        select
+        s.id
+        , s.host_id
+        , s.title
+        , s.description
+        , s.address
+        , s.price_per_hour
+        , s.capacity
+        , s.created_at
+        , s.updated_at
+        , s.is_deleted
+        , si.id
+        , si.space_id
+        , si.image_url
+        , si.is_main
+        , si.created_at
+        , si.updated_at
+        , si.is_deleted
+        from space s
+        left join space_image si
+        on s.id = si.id and si.is_main = 1 and si.is_deleted = 0
+        where s.is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            and (s.title like concat('%', #{keyword}, '%')
+            or s.address like concat('%', #{keyword}, '%'))
+        </if>
+        order by s.id desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="countSpaceListByKeyword" resultType="int">
+        select count(*)
+        from space
+        where is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            and (s.title like concat('%', #{keyword}, '%')
+            or s.address like concat('%', #{keyword}, '%'))
+        </if>
     </select>
 
 </mapper>
