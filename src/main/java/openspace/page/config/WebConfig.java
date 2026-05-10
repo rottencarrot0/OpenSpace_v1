@@ -1,8 +1,10 @@
 package openspace.page.config;
 
 
+import openspace.page.interceptor.LoginCheckInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -14,9 +16,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${file.upload.dir:uploads}")
     private String uploadDir;
 
-
-
-
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginCheckInterceptor())
+                .addPathPatterns(
+                        "/space/register",
+                        "/space/my"
+                );
+    }
 
     // 업로드 파일 정적 리소스 핸들러 등록 - /upload/
     @Override

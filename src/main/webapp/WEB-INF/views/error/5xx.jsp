@@ -11,9 +11,9 @@
 
 
 <div class="text-center py-5">
-    <h1 class="display-1 text-muted">404</h1>
-    <h2 class="mb-3">페이지를 찾을 수 없습니다.</h2>
-    <p class="text-muted mb-4">요청하신 페이지가 존재하지 않거나 삭제되었습니다.</p>
+    <h1 class="display-1 text-muted">500</h1>
+    <h2 class="mb-3">서버 오류가 발생했습니다.</h2>
+    <p class="text-muted mb-4">일시적인 서버 오류입니다. 잠시 후 다시 시도해 주세요.</p>
     <a href="${pageContext.request.contextPath}/" class="btn btn-dark mt-3">홈으로 돌아가기</a>
 </div>
 
