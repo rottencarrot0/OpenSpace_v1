@@ -1,5 +1,6 @@
 package openspace.page.service;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import openspace.page.domain.Space;
 import openspace.page.domain.SpaceImage;
@@ -146,5 +147,21 @@ public class SpaceService {
         spaceDetail.setCreatedAt(space.getCreatedAt());
         spaceDetail.setImages(space.getImages() != null ? space.getImages() : new ArrayList<>());
         return spaceDetail;
+    }
+
+    public void updateSpace(Long spaceId, @Valid SpaceRegister register, Long loginUserId) {
+        Space space = spaceMapper.findSpaceById(spaceId);
+        if(space == null) {
+            throw new ResourceNotFoundException("공간을 찾을 수 없습니다.");
+        }
+        if(!space.getHostId().equals(loginUserId)) {
+            throw new AuthenticationException("수정 권한이 없습니다.");
+        }
+        space.setTitle(register.getTitle());
+        space.setDescription(register.getDescription());
+        space.setAddress(register.getAddress());
+        space.setPricePerHour(register.getPricePerHour());
+        space.setCapacity(register.getCapacity());
+        spaceMapper.updateSpace(space);
     }
 }

@@ -86,17 +86,12 @@ public class SpaceController {
         model.addAttribute("spaces", spaceListByHostId);
         return "space/my_space";
     }
-
+    // 공간 상세
     @GetMapping("/{id}")
     public String spaceDetail(@PathVariable int id, Model model) {
         log.info("id = {}" , id);
 
         return "space/detail";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String SpaceEdit(@PathVariable int id, HttpSession session, Model model) {
-        return "space/edit";
     }
 
     @ResponseBody
@@ -110,6 +105,37 @@ public class SpaceController {
         spaceService.deleteSpace(id, loginUser.getId());
         return ResponseEntity.ok().body(CommonResponse.success(null));
     }
+    // 공간 수정
+    @GetMapping("/{id}/edit")
+    public String spaceEdit(@PathVariable Long id, HttpSession session, Model model) {
+        SpaceDetail spaceDetail = spaceService.getSpaceDetail(id);
 
-
+        User loginUser = (User)session.getAttribute(SessionConst.LOGIN_USER);
+        if(!loginUser.getId().equals(spaceDetail.getHostId())) {
+            return "error/404";
+        }
+        model.addAttribute("spaceDetail", spaceDetail);
+        return "space/edit";
+    }
+    // 공간 수정 등록
+    @PostMapping("/{id}")
+    public String spaceUpdate(@PathVariable Long id,
+                              @Valid SpaceRegister register, BindingResult bindingResult,
+                              HttpSession session, Model model) {
+        if (bindingResult.hasErrors()) {
+            SpaceDetail spaceDetail = spaceService.getSpaceDetail(id);
+            model.addAttribute("spaceDetail", spaceDetail);
+            model.addAttribute("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
+            return "space/edit";
+        }
+        try {
+            User loginUser = (User)session.getAttribute(SessionConst.LOGIN_USER);
+            spaceService.updateSpace(id, register, loginUser.getId());
+            return "redirect:/space/" + id;
+        } catch (RuntimeException e) {
+            SpaceDetail spaceDetail = spaceService.getSpaceDetail(id);
+            model.addAttribute("spaceDetail", spaceDetail);
+            return "space/edit";
+        }
+    }
 }

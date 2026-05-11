@@ -1,6 +1,8 @@
 package openspace.page.mapper;
 
+import jakarta.validation.Valid;
 import openspace.page.domain.Space;
+import openspace.page.dto.space.SpaceRegister;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,4 +20,6 @@ public interface SpaceMapper {
     int countSpaceListByKeyword(String keyword);
 
     void deleteSpaceById(Long spaceId);
+
+    void updateSpace(Space space);
 }
