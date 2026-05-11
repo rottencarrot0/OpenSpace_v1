@@ -28,14 +28,14 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/login")
-    public String login(@RequestParam(name = "redirectURL", required = false) String redirectURL, Model model) {
-        model.addAttribute("redirectURL", redirectURL);
+    public String login(@RequestParam(name = "redirectUrl", required = false) String redirectURL, Model model) {
+        model.addAttribute("redirectUrl", redirectURL);
         return "user/login";
     }
 
     @PostMapping("/login")
     public String login(@Valid UserLogin user, BindingResult bindingResult,
-                        @RequestParam(name = "redirectURL", defaultValue = "/") String redirectURL,
+                        @RequestParam(name = "redirectUrl", defaultValue = "/") String redirectURL,
                         HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());

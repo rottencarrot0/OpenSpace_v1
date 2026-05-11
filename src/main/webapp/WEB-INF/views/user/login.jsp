@@ -22,7 +22,7 @@
 
     <form action="/user/login" method="post">
 
-      <input type="hidden" name="redirectURL" value="${redirectURL}">
+      <input type="hidden" name="redirectUrl" value="${redirectUrl}">
 
       <div class="mb-3">
         <label for="email" class="form-label">이메일</label>
