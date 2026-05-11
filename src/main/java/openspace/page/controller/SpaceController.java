@@ -9,6 +9,7 @@ import openspace.page.dto.CommonResponse;
 import openspace.page.dto.space.SpaceDetail;
 import openspace.page.dto.space.SpaceList;
 import openspace.page.dto.space.SpaceRegister;
+import openspace.page.exception.ResourceNotFoundException;
 import openspace.page.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -88,10 +89,17 @@ public class SpaceController {
     }
     // 공간 상세
     @GetMapping("/{id}")
-    public String spaceDetail(@PathVariable int id, Model model) {
-        log.info("id = {}" , id);
-
-        return "space/detail";
+    public String spaceDetail(@PathVariable Long id, Model model, HttpSession session) {
+        try {
+            SpaceDetail detail = spaceService.getSpaceDetail(id);
+            User loginUser = (User) session.getAttribute(SessionConst.LOGIN_USER);
+            boolean isMine = detail.getHostId().equals(loginUser.getId());
+            model.addAttribute("space", detail);
+            model.addAttribute("isMine", isMine);
+            return "space/detail";
+        } catch (ResourceNotFoundException e) {
+            return "error/404";
+        }
     }
 
     @ResponseBody
