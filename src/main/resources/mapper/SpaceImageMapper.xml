@@ -8,4 +8,10 @@
         values (#{spaceId}, #{imageUrl}, #{isMain})
     </insert>
 
+    <update id="deleteBySpaceId" parameterType="Long">
+        update space_image
+        set is_deleted = 1
+        where space_id = #{spaceId}
+    </update>
+
 </mapper>

@@ -8,4 +8,5 @@ public interface SpaceImageMapper {
 
 
     void insertSpaceImage(SpaceImage img);
+    void deleteBySpaceId(Long spaceId);
 }

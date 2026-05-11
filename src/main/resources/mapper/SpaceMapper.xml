@@ -108,4 +108,10 @@
         </if>
     </select>
 
+    <update id="deleteSpaceById" parameterType="Long">
+       update space
+       set is_deleted = 1
+       where id = #{spaceId}
+    </update>
+
 </mapper>

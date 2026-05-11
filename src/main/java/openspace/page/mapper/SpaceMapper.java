@@ -16,4 +16,6 @@ public interface SpaceMapper {
                                        @Param("offset")int offset,
                                        @Param("limit")int pageSize);
     int countSpaceListByKeyword(String keyword);
+
+    void deleteSpaceById(Long spaceId);
 }
