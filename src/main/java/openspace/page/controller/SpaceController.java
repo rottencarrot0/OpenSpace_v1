@@ -5,9 +5,12 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import openspace.page.domain.SessionConst;
 import openspace.page.domain.User;
+import openspace.page.dto.CommonResponse;
+import openspace.page.dto.space.SpaceList;
 import openspace.page.dto.space.SpaceRegister;
 import openspace.page.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -78,7 +81,8 @@ public class SpaceController {
     @GetMapping("/my")
     public String mySpace(HttpSession session, Model model) {
         User loginUser = (User) session.getAttribute(SessionConst.LOGIN_USER);
-
+        List<SpaceList> spaceListByHostId = spaceService.getSpaceListByHostId(loginUser.getId());
+        model.addAttribute("spaces", spaceListByHostId);
         return "space/my_space";
     }
 
@@ -87,5 +91,21 @@ public class SpaceController {
         log.info("id = {}" , id);
 
         return "space/detail";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String SpaceEdit(@PathVariable int id, HttpSession session, Model model) {
+        return "space/edit";
+    }
+
+    @ResponseBody
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CommonResponse> spaceDelete(@PathVariable Long id, HttpSession session) {
+        User loginUser = (User) session.getAttribute(SessionConst.LOGIN_USER);
+        if(loginUser == null) {
+            return ResponseEntity.status(400).body(CommonResponse.error("로그인이 필요합니다."));
+        }
+        // spaceService.spaceDelete();
+        return ResponseEntity.ok().body(CommonResponse.success(null));
     }
 }

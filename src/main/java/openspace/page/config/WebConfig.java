@@ -1,6 +1,5 @@
 package openspace.page.config;
 
-
 import openspace.page.interceptor.LoginCheckInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

@@ -82,6 +82,17 @@ public class SpaceService {
         return map;
     }
 
+
+    public List<SpaceList> getSpaceListByHostId(Long hostId) {
+        List<Space> spaceListByHostId = spaceMapper.findSpaceListByHostId(hostId);
+        List<SpaceList> result = new ArrayList<>();
+        for (Space space : spaceListByHostId) {
+            SpaceList spaceList = toSpaceList(space);
+            result.add(spaceList);
+        }
+        return result;
+    }
+
     // 공간의 내용을 리스트에서 보여줄 내용만 뽑아온다.
     public SpaceList toSpaceList(Space space) {
         SpaceList spaceList = new SpaceList();
