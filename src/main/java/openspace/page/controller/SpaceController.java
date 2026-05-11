@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import openspace.page.domain.SessionConst;
 import openspace.page.domain.User;
 import openspace.page.dto.CommonResponse;
+import openspace.page.dto.space.SpaceDetail;
 import openspace.page.dto.space.SpaceList;
 import openspace.page.dto.space.SpaceRegister;
 import openspace.page.service.SpaceService;
@@ -105,7 +106,10 @@ public class SpaceController {
         if(loginUser == null) {
             return ResponseEntity.status(400).body(CommonResponse.error("로그인이 필요합니다."));
         }
-        // spaceService.spaceDelete();
+        log.info("삭제 서비스 실행 {}", id);
+        spaceService.deleteSpace(id, loginUser.getId());
         return ResponseEntity.ok().body(CommonResponse.success(null));
     }
+
+
 }

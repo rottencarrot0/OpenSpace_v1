@@ -3,10 +3,14 @@ package openspace.page.service;
 import lombok.extern.slf4j.Slf4j;
 import openspace.page.domain.Space;
 import openspace.page.domain.SpaceImage;
+import openspace.page.dto.space.SpaceDetail;
 import openspace.page.dto.space.SpaceList;
 import openspace.page.dto.space.SpaceRegister;
+import openspace.page.exception.AuthenticationException;
+import openspace.page.exception.ResourceNotFoundException;
 import openspace.page.mapper.SpaceImageMapper;
 import openspace.page.mapper.SpaceMapper;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,6 +86,20 @@ public class SpaceService {
         return map;
     }
 
+    @Transactional
+    public void deleteSpace(Long spaceId, Long userId) {
+        Space space = spaceMapper.findSpaceById(spaceId);
+        if (space == null) {
+            throw new ResourceNotFoundException("공간을 찾을 수 없습니다.");
+        }
+        if(!space.getHostId().equals(userId)) {
+            throw new AuthenticationException("삭제할 수 있는 권한이 없습니다.");
+        }
+        // fk 설정 테이블 먼저 지우고
+        spaceImageMapper.deleteBySpaceId(spaceId);
+        // 메인 테이블 지운다.
+        spaceMapper.deleteSpaceById(spaceId);
+    }
 
     public List<SpaceList> getSpaceListByHostId(Long hostId) {
         List<Space> spaceListByHostId = spaceMapper.findSpaceListByHostId(hostId);
@@ -110,5 +128,23 @@ public class SpaceService {
             spaceList.setMainImageUrl(mainImg.map(SpaceImage::getImageUrl).orElse(null));
         }
         return spaceList;
+    }
+
+    public SpaceDetail getSpaceDetail(Long id) {
+        Space space = spaceMapper.findSpaceById(id);
+        if(space == null) {
+            throw new ResourceNotFoundException("공간을 찾을 수 없습니다.");
+        }
+        SpaceDetail spaceDetail = new SpaceDetail();
+        spaceDetail.setId(space.getId());
+        spaceDetail.setHostId(space.getHostId());
+        spaceDetail.setTitle(space.getTitle());
+        spaceDetail.setDescription(space.getDescription());
+        spaceDetail.setAddress(space.getAddress());
+        spaceDetail.setPricePerHour(space.getPricePerHour());
+        spaceDetail.setCapacity(space.getCapacity());
+        spaceDetail.setCreatedAt(space.getCreatedAt());
+        spaceDetail.setImages(space.getImages() != null ? space.getImages() : new ArrayList<>());
+        return spaceDetail;
     }
 }
