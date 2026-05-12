@@ -93,7 +93,7 @@ public class SpaceController {
         try {
             SpaceDetail detail = spaceService.getSpaceDetail(id);
             User loginUser = (User) session.getAttribute(SessionConst.LOGIN_USER);
-            boolean isMine = detail.getHostId().equals(loginUser.getId());
+            boolean isMine = loginUser != null && loginUser.getId().equals(detail.getHostId());
             model.addAttribute("space", detail);
             model.addAttribute("isMine", isMine);
             return "space/detail";

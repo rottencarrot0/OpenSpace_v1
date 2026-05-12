@@ -64,7 +64,8 @@
         <div class="d-flex gap-2">
             <c:choose>
                 <c:when test="${empty sessionScope.LOGIN_USER}">
-                    <a href="${pageContext.request.contextPath}/user/login" class="btn btn-dark btn-lg">로그인 후 예야가하기</a>
+                    <a href="${pageContext.request.contextPath}/user/login?redirectUrl=/space/${space.id}"
+                       class="btn btn-dark btn-lg">로그인 후 예약하기</a>
                 </c:when>
                 <c:when test="${isMine}">
                     <button class="btn btn-secondary btn-lg" disabled>내 공간(예약 불가)</button>
@@ -72,7 +73,8 @@
                        class="btn btn-outline-dark btn-lg">공간 수정</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="${pageContext.request.contextPath}/reservation/new/${space.id}" class="btn btn-dark btn-lg">예약하기</a>
+                    <a href="${pageContext.request.contextPath}/reservation/new/${space.id}"
+                       class="btn btn-dark btn-lg">예약하기</a>
                 </c:otherwise>
             </c:choose>
         </div>
