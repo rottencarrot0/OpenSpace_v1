@@ -5,19 +5,21 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import openspace.page.domain.SessionConst;
 import openspace.page.domain.User;
+import openspace.page.dto.CommonResponse;
+import openspace.page.dto.reservation.ReservationList;
 import openspace.page.dto.reservation.ReservationRegister;
 import openspace.page.dto.space.SpaceDetail;
 import openspace.page.exception.BusinessException;
 import openspace.page.service.ReservationService;
 import openspace.page.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -66,7 +68,35 @@ public class ReservationController {
     @GetMapping("/my")
     public String my(HttpSession session, Model model) {
         User loginUser = (User) session.getAttribute(SessionConst.LOGIN_USER);
+        if(loginUser == null) {
+            return "redirect:/user/login?redirectUrl=/reservation/my";
+        }
+
+        List<ReservationList> reservations = reservationService.getReservationListByGuestId(loginUser.getId());
+        model.addAttribute("reservations", reservations);
+
         return "reservation/my-reservation";
     }
 
+    @ResponseBody
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<CommonResponse> cancelReservation(@PathVariable Long id, HttpSession session) {
+        User loginUser = (User)session.getAttribute(SessionConst.LOGIN_USER);
+        if(loginUser == null) {
+            return ResponseEntity.status(400).body(CommonResponse.error("로그인이 필요합니다."));
+        }
+        reservationService.cancelReservation(id, loginUser.getId());
+        return ResponseEntity.ok(CommonResponse.success(null));
+    }
+
+    // 호스트의 예약 목록이다
+    @GetMapping("/manage")
+    public String manageReservation(Model model, HttpSession session) {
+        User loginUser = (User) session.getAttribute(SessionConst.LOGIN_USER);
+        if(loginUser == null) {
+            return "redirect:/user/login?redirectUrl=/reservation/manage";
+        }
+//        reservationService.getReservationListByHostId(loginUser.getId());
+        return "";
+    }
 }
