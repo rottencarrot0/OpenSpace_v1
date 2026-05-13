@@ -14,7 +14,6 @@ public class Reservation {
     private LocalDateTime endDate;
     private int totalPrice;
     private ReservationStatus status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private int isDeleted;
+    private String spaceName;
+    private String guestName;
 }
