@@ -10,6 +10,7 @@ import openspace.page.dto.reservation.ReservationList;
 import openspace.page.dto.reservation.ReservationRegister;
 import openspace.page.dto.space.SpaceDetail;
 import openspace.page.exception.BusinessException;
+import openspace.page.exception.ResourceNotFoundException;
 import openspace.page.service.ReservationService;
 import openspace.page.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class ReservationController {
         if(null == session.getAttribute(SessionConst.LOGIN_USER)) {
             return "redirect:/user/login";
         }
+        // 서버에서 처리할 예외
         SpaceDetail space = spaceService.getSpaceDetail(id);
         model.addAttribute("space", space);
         return "reservation/form";
@@ -53,12 +55,13 @@ public class ReservationController {
         }
 
         User loginUser = (User) session.getAttribute(SessionConst.LOGIN_USER);
+        // 서버에서 처리할 예외
         SpaceDetail spaceDetail = spaceService.getSpaceDetail(register.getSpaceId());
 
         try {
             reservationService.createReservation(register, loginUser.getId(), spaceDetail.getPricePerHour());
             return "redirect:/reservation/my";
-        } catch(BusinessException e) {
+        } catch(BusinessException  e) {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("space", spaceDetail);
             return "reservation/form";
@@ -85,8 +88,12 @@ public class ReservationController {
         if(loginUser == null) {
             return ResponseEntity.status(400).body(CommonResponse.error("로그인이 필요합니다."));
         }
-        reservationService.cancelReservation(id, loginUser.getId());
-        return ResponseEntity.ok(CommonResponse.success(null));
+        try {
+            reservationService.cancelReservation(id, loginUser.getId());
+            return ResponseEntity.ok(CommonResponse.success(null));
+        } catch (BusinessException | ResourceNotFoundException e) {
+           return ResponseEntity.status(400).body(CommonResponse.error(e.getMessage()));
+        }
     }
 
     // 호스트의 예약 목록이다
@@ -96,7 +103,38 @@ public class ReservationController {
         if(loginUser == null) {
             return "redirect:/user/login?redirectUrl=/reservation/manage";
         }
-//        reservationService.getReservationListByHostId(loginUser.getId());
-        return "";
+        List<ReservationList> reservationList = reservationService.getReservationListByHostId(loginUser.getId());
+        model.addAttribute("reservations", reservationList);
+        return "reservation/manage";
+    }
+
+    @ResponseBody
+    @PostMapping("/approve/{id}")
+    public ResponseEntity<CommonResponse> approveReservation(@PathVariable Long id, HttpSession session) {
+        User loginUser = (User)session.getAttribute(SessionConst.LOGIN_USER);
+        if(loginUser == null) {
+            return ResponseEntity.status(400).body(CommonResponse.error("로그인이 필요합니다."));
+        }
+        try {
+            reservationService.approveReservation(id, loginUser.getId());
+            return ResponseEntity.ok(CommonResponse.success(null));
+        } catch (BusinessException | ResourceNotFoundException e) {
+            return ResponseEntity.status(400).body(CommonResponse.error(e.getMessage()));
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/reject/{id}")
+    public ResponseEntity<CommonResponse> rejectReservation(@PathVariable Long id, HttpSession session) {
+        User loginUser = (User)session.getAttribute(SessionConst.LOGIN_USER);
+        if(loginUser == null) {
+            return ResponseEntity.status(400).body(CommonResponse.error("로그인이 필요합니다."));
+        }
+        try {
+            reservationService.rejectReservation(id, loginUser.getId());
+            return ResponseEntity.ok(CommonResponse.success(null));
+        } catch (BusinessException | ResourceNotFoundException e) {
+            return ResponseEntity.status(400).body(CommonResponse.error(e.getMessage()));
+        }
     }
 }

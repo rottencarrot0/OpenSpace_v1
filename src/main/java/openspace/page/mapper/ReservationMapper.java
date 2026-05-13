@@ -16,4 +16,6 @@ public interface ReservationMapper {
     Reservation findReservationById(Long id);
 
     void updateReservationStatus(@Param("id") Long id, @Param("status") ReservationStatus reservationStatus);
+
+    List<Reservation> findReservationByHostId(Long id);
 }

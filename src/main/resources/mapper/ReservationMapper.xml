@@ -40,6 +40,27 @@
         order by r.created_at desc
     </select>
 
+    <select id="findReservationByHostId" parameterType="Long" resultMap="reservationListMap">
+        select
+            r.id ,
+            r.space_id,
+            r.guest_id,
+            r.start_date,
+            r.end_date,
+            r.total_price,
+            r.status,
+            s.title as space_name,
+            u.name as guest_name
+        from reservation r
+        join space s
+        on s.id = r.space_id and s.is_deleted = 0
+        join user u
+        on u.id = r.guest_id and u.is_deleted = 0
+        where s.host_id = #{id}
+        and r.is_deleted =0
+        order by r.id desc
+    </select>
+
     <select id="findReservationById" resultMap="reservationListMap" parameterType="Long">
         select
             r.id,
