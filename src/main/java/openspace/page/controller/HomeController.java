@@ -1,18 +1,24 @@
 package openspace.page.controller;
 
+import openspace.page.dto.space.SpaceList;
+import openspace.page.service.SpaceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 @Controller
 public class HomeController {
 
-    @GetMapping("/")
-    public String home() {
-        return "home";
-    }
+    @Autowired
+    private SpaceService spaceService;
 
-    @GetMapping("/test")
-    public String test() {
-        return "test";
+    @GetMapping("/")
+    public String home(Model model) {
+        List<SpaceList> latestSpace = spaceService.getLatestSpace(9);
+        model.addAttribute("space", latestSpace);
+        return "home";
     }
 }
