@@ -11,7 +11,6 @@ import openspace.page.exception.AuthenticationException;
 import openspace.page.exception.ResourceNotFoundException;
 import openspace.page.mapper.SpaceImageMapper;
 import openspace.page.mapper.SpaceMapper;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,7 +143,6 @@ public class SpaceService {
         spaceDetail.setAddress(space.getAddress());
         spaceDetail.setPricePerHour(space.getPricePerHour());
         spaceDetail.setCapacity(space.getCapacity());
-        spaceDetail.setCreatedAt(space.getCreatedAt());
         spaceDetail.setImages(space.getImages() != null ? space.getImages() : new ArrayList<>());
         return spaceDetail;
     }
@@ -163,5 +161,9 @@ public class SpaceService {
         space.setPricePerHour(register.getPricePerHour());
         space.setCapacity(register.getCapacity());
         spaceMapper.updateSpace(space);
+    }
+
+    public List<SpaceList> getLatestSpace(int limit) {
+        return spaceMapper.findLatestSpace(limit).stream().map(this::toSpaceList).toList();
     }
 }
