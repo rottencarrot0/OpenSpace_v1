@@ -17,7 +17,4 @@ public class SpaceImage {
     private Long spaceId;
     private String imageUrl;
     private int isMain;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
-    private int isDeleted;
 }

@@ -24,8 +24,5 @@ public class Space {
     private String address;
     private int pricePerHour;
     private int capacity;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private int isDeleted;
     private List<SpaceImage> images;
 }
