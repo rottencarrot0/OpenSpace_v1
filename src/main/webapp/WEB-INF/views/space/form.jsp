@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-
+<div class="p-4"></div>
 <div class="row justify-content-center">
     <div class="col-md-8">
         <h2 class="mb-4">공간 등록</h2>

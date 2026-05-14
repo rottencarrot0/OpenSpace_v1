@@ -9,7 +9,7 @@
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
-
+<div class="p-4"></div>
 <div class="row justify-content-center">
   <div class="col-md-4">
     <h2 class="mb-4">로그인</h2>

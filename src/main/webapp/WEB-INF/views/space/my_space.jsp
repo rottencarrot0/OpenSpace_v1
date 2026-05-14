@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-
+<div class="p-4"></div>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>내 공간 관리</h2>
     <a href="${pageContext.request.contextPath}/space/register" class="btn btn-primary">새 공간 등록</a>

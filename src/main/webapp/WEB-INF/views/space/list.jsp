@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-
+<div class="p-4"></div>
 <h2 class="mb-4">공간 검색</h2>
 <form action="${pageContext.request.contextPath}/space">
     <div class="input-group">
@@ -34,10 +34,10 @@
                         <div class="card h-100 shadow-sm">
                             <c:choose>
                                 <c:when test="${not empty space.mainImageUrl}">
-                                    <img src="<c:out value="${space.mainImageUrl}"/>" class="card-img-top" alt=""/>
+                                    <img src="<c:out value="${space.mainImageUrl}"/>" class="card-img-top" style="height:200px; object-fit:cover;" alt=""/>
                                 </c:when>
                                 <c:otherwise>
-                                    <img src="https://placehold.co/400x300" class="card-img-top" alt=""/>
+                                    <img src="https://placehold.co/400x300" class="card-img-top" style="height:200px; object-fit:cover;" alt=""/>
                                 </c:otherwise>
                             </c:choose>
                             <div class="card-body">

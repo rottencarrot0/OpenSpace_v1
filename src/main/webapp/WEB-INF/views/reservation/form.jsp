@@ -9,7 +9,7 @@
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-
+<div class="p-4"></div>
 <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
         <h2 class="mb-4">예약 신청</h2>

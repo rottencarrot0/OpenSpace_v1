@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<div class="p-4"></div>
 <h2 class="mb-4">예약 관리</h2>
 <c:if test="${empty reservations}">
     <div class="text-center text-muted">
