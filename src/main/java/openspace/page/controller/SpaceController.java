@@ -36,8 +36,6 @@ public class SpaceController {
         return "space/form";
     }
 
-
-    // 등록 / 수정 시 같은 controller 사용한다.
     @PostMapping
     public String createSpace(
             @Valid SpaceRegister register,
@@ -146,4 +144,6 @@ public class SpaceController {
             return "space/edit";
         }
     }
+
+
 }

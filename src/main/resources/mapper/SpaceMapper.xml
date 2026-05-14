@@ -14,17 +14,11 @@
         <result column="address" property="address"/>
         <result column="price_per_hour" property="pricePerHour"/>
         <result column="capacity" property="capacity"/>
-        <result column="s_created_at" property="createdAt"/>
-        <result column="s_updated_at" property="updatedAt"/>
-        <result column="s_is_deleted" property="isDeleted"/>
         <collection property="images" ofType="SpaceImage">
             <id column="si_id" property="id"/>
             <result column="space_id" property="spaceId"/>
             <result column="image_url" property="imageUrl"/>
             <result column="is_main" property="isMain"/>
-            <result column="si_created_at" property="createAt"/>
-            <result column="si_updated_at" property="updateAt"/>
-            <result column="si_is_deleted" property="isDeleted"/>
         </collection>
     </resultMap>
 
@@ -42,16 +36,10 @@
              , s.address
              , s.price_per_hour
              , s.capacity
-             , s.created_at as s_created_at
-             , s.updated_at as s_updated_at
-             , s.is_deleted as s_is_deleted
              , si.id as si_id
              , si.space_id
              , si.image_url
              , si.is_main
-             , si.created_at as si_created_at
-             , si.updated_at as si_updated_at
-             , si.is_deleted as si_is_deleted
         from space s
         left join space_image si
         on s.id = si.space_id and si.is_deleted = 0
@@ -59,21 +47,24 @@
           and s.is_deleted = 0
     </select>
 
-    <select id="findSpaceListByHostId" parameterType="Long" resultType="Space">
-        select id             as id
-             , host_id        as hostId
-             , title          as title
-             , description    as description
-             , address        as address
-             , price_per_hour as pricePerHour
-             , capacity       as capacity
-             , created_at     as createdAt
-             , updated_at     as updatedAt
-             , is_deleted     as isDeleted
-        from space
-        where host_id = #{hostId}
-          and is_deleted = 0
-        order by id desc
+    <select id="findSpaceListByHostId" parameterType="Long" resultMap="spaceWithImages">
+        select s.id             as s_id
+             , s.host_id        as hostId
+             , s.title          as title
+             , s.description    as description
+             , s.address        as address
+             , s.price_per_hour as pricePerHour
+             , s.capacity       as capacity
+             , si.id as si_id
+             , si.space_id
+             , si.image_url
+             , si.is_main
+        from space s
+        left join space_image si
+        on s.id = si.space_id and si.is_main = 1 and si.is_deleted = 0
+        where s.host_id = #{hostId}
+          and s.is_deleted = 0
+        order by s.id desc
     </select>
 
     <select id="findSpaceListByKeyword" resultMap="spaceWithImages">
@@ -84,19 +75,13 @@
             , s.address
             , s.price_per_hour
             , s.capacity
-            , s.created_at as s_created_at
-            , s.updated_at as s_updated_at
-            , s.is_deleted as s_is_deleted
             , si.id as si_id
             , si.space_id
             , si.image_url
             , si.is_main
-            , si.created_at as si_created_at
-            , si.updated_at as si_updated_at
-            , si.is_deleted as si_is_deleted
         from space s
         left join space_image si
-        on s.id = si.id and si.is_main = 1 and si.is_deleted = 0
+        on s.id = si.space_id and si.is_main = 1 and si.is_deleted = 0
         where s.is_deleted = 0
         <if test="keyword != null and keyword != ''">
             and (s.title like concat('%', #{keyword}, '%')
@@ -106,13 +91,34 @@
         limit #{limit} offset #{offset}
     </select>
 
+    <select id="findLatestSpace" parameterType="Integer" resultMap="spaceWithImages">
+        select
+            s.id as s_id,
+            s.host_id,
+            s.title,
+            s.description,
+            s.address,
+            s.price_per_hour,
+            s.capacity,
+            si.id as si_id,
+            si.space_id,
+            si.image_url,
+            si.is_main
+        from space s
+        left join space_image si
+        on s.id = si.space_id and si.is_main = 1 and si.is_deleted = 0
+        where s.is_deleted = 0
+        order by s.id desc
+        limit #{limit}
+    </select>
+
     <select id="countSpaceListByKeyword" resultType="int">
         select count(*)
         from space
         where is_deleted = 0
         <if test="keyword != null and keyword != ''">
-            and (s.title like concat('%', #{keyword}, '%')
-            or s.address like concat('%', #{keyword}, '%'))
+            and (title like concat('%', #{keyword}, '%')
+            or address like concat('%', #{keyword}, '%'))
         </if>
     </select>
 

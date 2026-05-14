@@ -27,12 +27,14 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    // 로그인 폼
     @GetMapping("/login")
     public String login(@RequestParam(name = "redirectUrl", required = false) String redirectURL, Model model) {
         model.addAttribute("redirectUrl", redirectURL);
         return "user/login";
     }
 
+    // 로그인
     @PostMapping("/login")
     public String login(@Valid UserLogin user, BindingResult bindingResult,
                         @RequestParam(name = "redirectUrl", defaultValue = "/") String redirectURL,
@@ -53,13 +55,13 @@ public class UserController {
         return "redirect:" + redirectURL;
     }
 
-
-
+    // 회워 가입 폼
     @GetMapping("/register")
     public String registerForm() {
         return "user/register";
     }
 
+    // 회원 가입
     @PostMapping("/register")
     public String register(@Valid UserRegister register, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -71,5 +73,18 @@ public class UserController {
         userService.register(register);
         return "redirect:/user/login";
 
+    }
+
+    @GetMapping("/profile")
+    public String profile(Model model, HttpSession session) {
+        User user = (User) session.getAttribute(LOGIN_USER);
+        model.addAttribute("user", user);
+        return "user/profile";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/user/login";
     }
 }

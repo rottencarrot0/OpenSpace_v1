@@ -22,4 +22,6 @@ public interface SpaceMapper {
     void deleteSpaceById(Long spaceId);
 
     void updateSpace(Space space);
+
+    List<Space> findLatestSpace(int limit);
 }
