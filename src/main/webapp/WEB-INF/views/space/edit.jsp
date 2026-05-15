@@ -22,24 +22,29 @@
               enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">제목</label>
-                <input type="text" class="form-control" name="title" id="title" value="<c:out value="${spaceDetail.title}"/>" required/>
+                <input type="text" class="form-control" name="title" id="title"
+                       value="<c:out value="${spaceDetail.title}"/>" required/>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">설명</label>
-                <input type="text" class="form-control" name="description" id="description" value="<c:out value="${spaceDetail.description}"/>" required/>
+                <input type="text" class="form-control" name="description" id="description"
+                       value="<c:out value="${spaceDetail.description}"/>" required/>
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label">주소</label>
-                <input type="text" class="form-control" name="address" id="address" value="<c:out value="${spaceDetail.address}"/>" required/>
+                <input type="text" class="form-control" name="address" id="address"
+                       value="<c:out value="${spaceDetail.address}"/>" required/>
             </div>
             <div class="mb-3">
                 <label for="pricePerHour" class="form-label">시간당 가격</label>
-                <input type="number" class="form-control" name="pricePerHour" id="pricePerHour" value="${spaceDetail.pricePerHour}" min="0"
+                <input type="number" class="form-control" name="pricePerHour" id="pricePerHour"
+                       value="${spaceDetail.pricePerHour}" min="0"
                        required/>
             </div>
             <div class="mb-3">
                 <label for="capacity" class="form-label">수용 인원</label>
-                <input type="text" class="form-control" name="capacity" id="capacity" value="${spaceDetail.capacity}" min="1" max="1000" required/>
+                <input type="text" class="form-control" name="capacity" id="capacity" value="${spaceDetail.capacity}"
+                       min="1" max="1000" required/>
                 <div class="form-text">최대 1000명까지 등록 가능합니다.</div>
             </div>
 
@@ -47,8 +52,18 @@
                 <div class="mb-3">
                     <label class="form-label">기존 이미지</label>
                     <div class="d-flex flex-wrap gap-2">
-                        <c:forEach items="${spaceDetail.images}" var="img">
-                            <img src="${pageContext.request.contextPath}${img.imageUrl}" style="width: 120px;height: 90px;" alt="a" />
+                        <c:forEach var="img" items="${spaceDetail.images}">
+                            <img src="${pageContext.request.contextPath}${img.imageUrl}"
+                                 alt="이미지" class="img-thumbnail"
+                                 style="width:120px; height:90px;"/>
+                            <div class="form-check d-flex justify-content-center">
+                                <input class="form-check-input" type="checkbox"
+                                       name="deleteImageIds" value="${img.id}" id="del-${img.id}">
+                                <label class="form-check-label ms-1 text-danger small" for="del-${img.id}">삭제</label>
+                            </div>
+                            <c:if test="${img.isMain == 1}">
+                                <span class="badge bg-primary mt-1">대표</span>
+                            </c:if>
                         </c:forEach>
                     </div>
                 </div>
@@ -68,7 +83,6 @@
         </form>
     </div>
 </div>
-
 
 
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
