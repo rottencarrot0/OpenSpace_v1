@@ -25,6 +25,11 @@ public class FileUploadService {
         Files.createDirectories(dirPath);
 
         for (MultipartFile file : files) {
+            // 빈 파일 건너뜀
+            if (file == null || file.isEmpty()) {
+                continue;
+            }
+
             String originalFilename = file.getOriginalFilename();
             String extension = "";
             if(originalFilename != null && originalFilename.contains(".")) {
