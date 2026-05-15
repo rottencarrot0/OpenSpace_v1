@@ -1,5 +1,7 @@
 package openspace.page.config;
 
+import openspace.page.interceptor.GuestOnlyInterceptor;
+import openspace.page.interceptor.HostOnlyInterceptor;
 import openspace.page.interceptor.LoginCheckInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +22,26 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .addPathPatterns(
                         "/space/register",
-                        "/space/my"
+                        "/space/my",
+                        "/space/*/edit",
+                        "/reservation/new/*",
+                        "/reservation/my",
+                        "/reservation/manage",
+                        "/reservation/approve/*",
+                        "/reservation/reject/*",
+                        "/user/profile"
+                );
+        registry.addInterceptor(new GuestOnlyInterceptor())
+                .addPathPatterns(
+                        "/reservation/my",
+                        "/reservation/new/*"
+                );
+        registry.addInterceptor(new HostOnlyInterceptor())
+                .addPathPatterns(
+                        "/reservation/manage",
+                        "/space/register",
+                        "/space/my",
+                        "/space/*/edit"
                 );
     }
 
