@@ -9,6 +9,7 @@ import openspace.page.dto.CommonResponse;
 import openspace.page.dto.space.SpaceDetail;
 import openspace.page.dto.space.SpaceList;
 import openspace.page.dto.space.SpaceRegister;
+import openspace.page.exception.FileUploadException;
 import openspace.page.exception.ResourceNotFoundException;
 import openspace.page.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -126,7 +128,10 @@ public class SpaceController {
     // 공간 수정 등록
     @PostMapping("/{id}")
     public String spaceUpdate(@PathVariable Long id,
-                              @Valid SpaceRegister register, BindingResult bindingResult,
+                              @Valid SpaceRegister register,
+                              BindingResult bindingResult,
+                              @RequestParam(required = false) List<MultipartFile> images,
+                              @RequestParam(required = false) List<Long> deleteImageIds,
                               HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
             SpaceDetail spaceDetail = spaceService.getSpaceDetail(id);
@@ -136,8 +141,13 @@ public class SpaceController {
         }
         try {
             User loginUser = (User)session.getAttribute(SessionConst.LOGIN_USER);
-            spaceService.updateSpace(id, register, loginUser.getId());
+            spaceService.updateSpace(id, register, images, deleteImageIds, loginUser.getId());
             return "redirect:/space/" + id;
+        } catch(FileUploadException e) {
+            SpaceDetail spaceDetail = spaceService.getSpaceDetail(id);
+            model.addAttribute("spaceDetail", spaceDetail);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "space/edit";
         } catch (RuntimeException e) {
             SpaceDetail spaceDetail = spaceService.getSpaceDetail(id);
             model.addAttribute("spaceDetail", spaceDetail);

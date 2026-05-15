@@ -8,6 +8,7 @@ import openspace.page.dto.space.SpaceDetail;
 import openspace.page.dto.space.SpaceList;
 import openspace.page.dto.space.SpaceRegister;
 import openspace.page.exception.AuthenticationException;
+import openspace.page.exception.FileUploadException;
 import openspace.page.exception.ResourceNotFoundException;
 import openspace.page.mapper.SpaceImageMapper;
 import openspace.page.mapper.SpaceMapper;
@@ -143,11 +144,13 @@ public class SpaceService {
         spaceDetail.setAddress(space.getAddress());
         spaceDetail.setPricePerHour(space.getPricePerHour());
         spaceDetail.setCapacity(space.getCapacity());
-        spaceDetail.setImages(space.getImages() != null ? space.getImages() : new ArrayList<>());
+        spaceDetail.setImages(space.getImages() != null ? space.getImages() : Collections.emptyList());
         return spaceDetail;
     }
 
-    public void updateSpace(Long spaceId, @Valid SpaceRegister register, Long loginUserId) {
+    @Transactional
+    public void updateSpace(Long spaceId, @Valid SpaceRegister register,
+                            List<MultipartFile> images, List<Long> deleteImgIds, Long loginUserId) {
         Space space = spaceMapper.findSpaceById(spaceId);
         if(space == null) {
             throw new ResourceNotFoundException("공간을 찾을 수 없습니다.");
@@ -161,6 +164,31 @@ public class SpaceService {
         space.setPricePerHour(register.getPricePerHour());
         space.setCapacity(register.getCapacity());
         spaceMapper.updateSpace(space);
+
+        // 이미지 삭제
+        if(deleteImgIds != null && !deleteImgIds.isEmpty()) {
+            for(Long imgId :deleteImgIds) {
+                spaceImageMapper.deleteByImageId(imgId);
+            }
+        }
+
+        // 이미지 삭제했으니 메인 남아있는지 확인한다.
+        int isThereMain = spaceImageMapper.findMainImageBySpaceId(spaceId);
+
+        List<String> urls = null;
+        try {
+            urls = fileUploadService.fileUpload(images);
+        } catch (IOException e) {
+            throw new FileUploadException();
+        }
+
+        for(int i = 0; i< urls.size(); i++) {
+            SpaceImage img = new SpaceImage();
+            img.setSpaceId(spaceId);
+            img.setImageUrl(urls.get(i));
+            img.setIsMain(isThereMain == 0 && i == 0 ? 1 : 0);
+            spaceImageMapper.insertSpaceImage(img);
+        }
     }
 
     public List<SpaceList> getLatestSpace(int limit) {

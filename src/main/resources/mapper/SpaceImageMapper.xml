@@ -14,4 +14,18 @@
         where space_id = #{spaceId}
     </update>
 
+    <update id="deleteByImageId" parameterType="Long">
+        update space_image
+        set is_deleted = 1
+        where id = #{imgId}
+    </update>
+
+    <select id="findMainImageBySpaceId" parameterType="Long" resultType="int">
+        select count(*)
+        from space_image
+        where space_id = #{space_id}
+        and is_main = 1
+        and is_deleted = 0
+    </select>
+
 </mapper>
